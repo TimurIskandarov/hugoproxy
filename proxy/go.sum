@@ -1,5 +1,7 @@
 github.com/brianvoe/gofakeit/v6 v6.26.4 h1:+7JwTAXxw46Hdo1hA/F92Wi7x8vTwbjdFtBWYdm8eII=
 github.com/brianvoe/gofakeit/v6 v6.26.4/go.mod h1:Xj58BMSnFqcn/fAQeSK+/PLtC5kSb7FJIq4JyGa8vEs=
+github.com/ekomobile/dadata/v2 v2.9.0 h1:3v5eQzfGMG8tQ5YkVTDoVMkA1R02dwYpLQEcFPZAiKA=
+github.com/ekomobile/dadata/v2 v2.9.0/go.mod h1:5ZlaX9giWP5oE91CfBRAuZO6mRcupQMnmaezQB52bXU=
 github.com/go-chi/chi v1.5.5 h1:vOB/HbEMt9QqBqErz07QehcOKHaWFtuj87tTDVz2qXE=
 github.com/go-chi/chi v1.5.5/go.mod h1:C9JqLr3tIYjDOZpzn+BCuxY8z8vmca43EeMgyZt7irw=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=

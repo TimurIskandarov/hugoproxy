@@ -12,6 +12,7 @@ import (
 
 	"test/binary"
 	"test/counter"
+	"test/geo"
 	"test/graph"
 
 	"github.com/go-chi/chi"
@@ -29,7 +30,11 @@ func main() {
 		w.Write([]byte("Hello from API"))
 	})
 
-	go WorkerTest()
+	geoService := geo.New()
+	r.Post("/api/address/search", geoService.SearchHandler)
+	// r.Post("/api/address/geocode", geoService.GeocodeHandler)
+
+	// go WorkerTest()
 
 	http.ListenAndServe(":8080", r)
 }

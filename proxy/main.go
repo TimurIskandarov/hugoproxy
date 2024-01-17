@@ -32,7 +32,7 @@ func main() {
 
 	geoService := geo.New()
 	r.Post("/api/address/search", geoService.SearchHandler)
-	// r.Post("/api/address/geocode", geoService.GeocodeHandler)
+	r.Post("/api/address/geocode", geoService.GeocodeHandler)
 
 	// go WorkerTest()
 

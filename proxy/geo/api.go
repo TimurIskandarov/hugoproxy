@@ -1,14 +1,14 @@
 package geo
 
 import (
-	"bytes"
+	// "bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
+	// "io"
 	"log"
 	"net/http"
-	"strings"
+	// "strings"
 
 	"os"
 
@@ -104,33 +104,19 @@ func (g *Geo) GeocodeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *Geo) GetGeocode(r *http.Request) ([]*SuggestionGeocode, error) {
-	geocodeURL := "https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address"
+	var query RequestGeocode
+	json.NewDecoder(r.Body).Decode(&query)
 
-	body, _ := io.ReadAll(r.Body)
-	replaceBody := strings.ReplaceAll(string(body), "lng", "lon")
-	buffer := bytes.NewBuffer([]byte(replaceBody))
-
-	request, _ := http.NewRequestWithContext(context.Background(), http.MethodPost, geocodeURL, buffer)
-
-	request.Header.Add("Authorization", r.Header.Get("Authorization"))
-	request.Header.Add("Content-Type", r.Header.Get("Content-Type"))
-	request.Header.Add("Accept", r.Header.Get("Accept"))
-
-	fmt.Println("header:", request.Header)
-
-	client := new(http.Client)
-	response, err := client.Do(request)
-	if err != nil {
-		log.Println("geocode request error: ", err)
-		return nil, err
+	querySuggestion := RequestSuggestionGeocode{
+		Lat: query.Lat,
+		Lng: query.Lng,
 	}
 
 	var result = &ResponseSuggestionGeocode{}
-	err = json.NewDecoder(response.Body).Decode(result)
+	err := g.Api.Client.Post(context.Background(), "geolocate/address", &querySuggestion, result)
 	if err != nil {
-		log.Println("decode response error: ", err)
 		return nil, err
 	}
-
+	
 	return result.Suggestions, nil
 }

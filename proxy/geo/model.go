@@ -16,6 +16,16 @@ type Address struct {
 }
 
 // API: обратное геокодирование https://dadata.ru/api/geolocate/
+type RequestGeocode struct {
+	Lat string `json:"lat"`
+	Lng string `json:"lng"`
+}
+
+type RequestSuggestionGeocode struct {
+	Lat string `json:"lat"`
+	Lng string `json:"lon"`
+}
+
 type ResponseGeocode struct {
 	Addresses []*Address `json:"addresses"`
 }

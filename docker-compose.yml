@@ -17,14 +17,14 @@ services:
       context: ./proxy
       dockerfile: ./Dockerfile
       args:
-        HTTPS_PROXY: $https_proxy
+        # HTTPS_PROXY: $https_proxy
     container_name: proxy
     volumes:
       - "./hugo/content:/app/static"
     environment:
       DADATA_API_KEY: ${DADATA_API_KEY}
       DADATA_SECRET_KEY: ${DADATA_SECRET_KEY}
-      https_proxy: ${https_proxy}
+      # https_proxy: ${https_proxy}
     ports:
       - "8080:8080"
     networks:

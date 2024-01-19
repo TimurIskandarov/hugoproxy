@@ -2,22 +2,15 @@ package main
 
 import (
 	"fmt"
-	// "log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	// "os"
 	"strings"
-	// "time"
 
-	// "test/worker/binary"
-	// "test/worker/counter"
-	// "test/geo"
-	"test/worker"
-	// "test/worker/graph"
+	"test/geo"
+	// "test/worker"
 
 	"github.com/go-chi/chi"
-	// "github.com/mohae/deepcopy"
 )
 
 func main() {
@@ -31,11 +24,11 @@ func main() {
 		w.Write([]byte("Hello from API"))
 	})
 
-	// geoService := geo.New()
-	// r.Post("/api/address/search", geoService.SearchHandler)
-	// r.Post("/api/address/geocode", geoService.GeocodeHandler)
+	geoService := geo.New()
+	r.Post("/api/address/search", geoService.SearchHandler)
+	r.Post("/api/address/geocode", geoService.GeocodeHandler)
 
-	go worker.Tasks()
+	// go worker.Tasks()
 
 	http.ListenAndServe(":8080", r)
 }

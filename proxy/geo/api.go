@@ -1,15 +1,11 @@
 package geo
 
 import (
-	// "bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	// "io"
 	"log"
 	"net/http"
-	// "strings"
-
 	"os"
 
 	"github.com/ekomobile/dadata/v2"

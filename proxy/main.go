@@ -2,21 +2,22 @@ package main
 
 import (
 	"fmt"
-	"log"
+	// "log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"os"
+	// "os"
 	"strings"
-	"time"
+	// "time"
 
-	"test/binary"
-	"test/counter"
-	"test/geo"
-	"test/graph"
+	// "test/worker/binary"
+	// "test/worker/counter"
+	// "test/geo"
+	"test/worker"
+	// "test/worker/graph"
 
 	"github.com/go-chi/chi"
-	"github.com/mohae/deepcopy"
+	// "github.com/mohae/deepcopy"
 )
 
 func main() {
@@ -30,11 +31,11 @@ func main() {
 		w.Write([]byte("Hello from API"))
 	})
 
-	geoService := geo.New()
-	r.Post("/api/address/search", geoService.SearchHandler)
-	r.Post("/api/address/geocode", geoService.GeocodeHandler)
+	// geoService := geo.New()
+	// r.Post("/api/address/search", geoService.SearchHandler)
+	// r.Post("/api/address/geocode", geoService.GeocodeHandler)
 
-	// go WorkerTest()
+	go worker.Tasks()
 
 	http.ListenAndServe(":8080", r)
 }
@@ -81,43 +82,4 @@ func (rp *ReverseProxy) ReverseProxy(next http.Handler) http.Handler {
 		}
 		proxy.ServeHTTP(w, r)
 	})
-}
-
-func WorkerTest() {
-	t := time.NewTicker(5 * time.Second)
-	var b byte = 0
-
-	var totalNodes int = 4
-	avl := binary.GenerateTree(totalNodes)
-	bin := deepcopy.Copy(avl).(*binary.AVLTree)
-
-	for {
-		select {
-		case tick := <-t.C:
-			contentCounter := counter.GetCounterPage(tick, b)
-			err := os.WriteFile("/app/static/tasks/_index.md", []byte(contentCounter), 0644)
-			if err != nil {
-				log.Println(err)
-			}
-			b++
-
-			binary.SetRandomNode(avl, bin)
-			contentAVL := binary.GetAVLPage(avl, bin)
-			err = os.WriteFile("/app/static/tasks/binary.md", []byte(contentAVL), 0644)
-			if err != nil {
-				log.Println(err)
-			}
-
-			totalNodes++
-			if totalNodes == 100 {
-				totalNodes = 4
-			}
-
-			contentGraph := graph.GetGraphPage()
-			err = os.WriteFile("/app/static/tasks/graph.md", []byte(contentGraph), 0644)
-			if err != nil {
-				log.Println(err)
-			}
-		}
-	}
 }

@@ -9,7 +9,7 @@ import (
 func GetCounterPage(tick time.Time, counter byte) string {
 	return fmt.Sprintf(
 		content,
-		tick.Format("15:04:05"),
+		tick.Local().Format("15:04:05"),
 		counter,
 	)
 }

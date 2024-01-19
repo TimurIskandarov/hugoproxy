@@ -16,7 +16,7 @@ func Test_height(t *testing.T) {
 	node = &Node{Key: 10, Height: 5}
 	got = height(node)
 	if got != 5 {
-		t.Errorf("Ожидалось, что height(node)=3, получено %v", got)
+		t.Errorf("Ожидалось, что height(node)=5, получено %v", got)
 	}
 }
 

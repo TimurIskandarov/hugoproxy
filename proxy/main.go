@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"test/geo"
+	"test/static"
+	
 	// "test/worker"
 
 	"github.com/go-chi/chi"
@@ -27,6 +29,10 @@ func main() {
 	geoService := geo.New()
 	r.Post("/api/address/search", geoService.SearchHandler)
 	r.Post("/api/address/geocode", geoService.GeocodeHandler)
+
+	// r.Get("/public/*", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))).ServeHTTP(w, r)
+	// })
 
 	// go worker.Tasks()
 
@@ -51,6 +57,16 @@ func (rp *ReverseProxy) ReverseProxy(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
+
+		if strings.HasPrefix(r.URL.Path, "/swagger") {
+			static.SwaggerUI(w, r)
+			return
+		}		
+		if strings.HasPrefix(r.URL.Path, "/public") {
+			http.ServeFile(w, r, "./public/swagger.json")
+			return
+		}
+
 		link := fmt.Sprintf("http://%s:%s", rp.host, rp.port)
 		uri, _ := url.Parse(link)
 

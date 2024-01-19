@@ -1,6 +1,6 @@
 module test
 
-go 1.21.5
+go 1.21
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.26.4

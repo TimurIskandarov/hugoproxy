@@ -1,0 +1,57 @@
+{
+  "consumes": [
+    "application/json",
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Документация Geo API.\n\nSchemes:\nhttp\nhttps",
+    "title": "infoblog.",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/api/address/geocode": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "Получение адреса по широте и долготе",
+        "tags": [
+          "geo"
+        ],
+        "operationId": "RequestGeocode",
+        "parameters": [
+          {
+            "example": "{\"lat\":\"59.7221\",\"lon\":\"30.4554\"}",
+            "name": "Coordinates",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/ResponseGeocode"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

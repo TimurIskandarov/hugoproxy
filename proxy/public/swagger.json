@@ -6,10 +6,14 @@
   "produces": [
     "application/json"
   ],
+  "schemes": [
+    "http",
+    "https"
+  ],
   "swagger": "2.0",
   "info": {
-    "description": "Документация Geo API.\n\nSchemes:\nhttp\nhttps",
-    "title": "infoblog.",
+    "description": "Документация Geo API.",
+    "title": "Geo API.",
     "version": "1.0.0"
   },
   "basePath": "/",
@@ -23,14 +27,15 @@
             ]
           }
         ],
-        "description": "Получение адреса по широте и долготе",
+        "description": "Получение адреса по долготе и широте",
         "tags": [
           "geo"
         ],
         "operationId": "RequestGeocode",
         "parameters": [
           {
-            "example": "{\"lat\":\"59.7221\",\"lon\":\"30.4554\"}",
+            "example": "{\"lat\":\"59.7221\",\"lng\":\"30.4554\"}",
+            "description": "Координаты",
             "name": "Coordinates",
             "in": "body",
             "required": true,
@@ -41,10 +46,87 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/ResponseGeocode"
+            "description": "ResponseGeocode",
+            "schema": {
+              "$ref": "#/definitions/ResponseGeocode"
+            }
           }
         }
       }
+    },
+    "/api/address/search": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "[]"
+            ]
+          }
+        ],
+        "description": "Получение координат по адресу",
+        "tags": [
+          "geo"
+        ],
+        "operationId": "RequestAddress",
+        "parameters": [
+          {
+            "example": "{\"query\": \"москва тверская\"}",
+            "description": "Адрес",
+            "name": "Query",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ResponseAddress",
+            "schema": {
+              "$ref": "#/definitions/ResponseAddress"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "string",
+          "x-go-name": "Lat"
+        },
+        "lon": {
+          "type": "string",
+          "x-go-name": "Lng"
+        },
+        "value": {
+          "type": "string",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-package": "test/geo"
+    },
+    "ResponseAddress": {
+      "type": "object",
+      "properties": {
+        "Addresses": {
+          "$ref": "#/definitions/Address"
+        }
+      },
+      "x-go-package": "test/static"
+    },
+    "ResponseGeocode": {
+      "type": "object",
+      "properties": {
+        "Addresses": {
+          "$ref": "#/definitions/Address"
+        }
+      },
+      "x-go-package": "test/static"
     }
   },
   "securityDefinitions": {

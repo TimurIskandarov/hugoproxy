@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -9,7 +11,7 @@ import (
 
 	"test/geo"
 	"test/static"
-	
+
 	// "test/worker"
 
 	"github.com/go-chi/chi"
@@ -61,7 +63,7 @@ func (rp *ReverseProxy) ReverseProxy(next http.Handler) http.Handler {
 		if strings.HasPrefix(r.URL.Path, "/swagger") {
 			static.SwaggerUI(w, r)
 			return
-		}		
+		}
 		if strings.HasPrefix(r.URL.Path, "/public") {
 			http.ServeFile(w, r, "./public/swagger.json")
 			return
@@ -88,7 +90,14 @@ func (rp *ReverseProxy) ReverseProxy(next http.Handler) http.Handler {
 				// rh := http.RedirectHandler(link + r.URL.Path, http.StatusMovedPermanently)
 				// rh.ServeHTTP(w, r)
 			},
+			ErrorHandler: func(rw http.ResponseWriter, req *http.Request, err error) {
+				if err != context.Canceled {
+					log.Printf("http: proxy error: %v", err)
+				}
+				rw.WriteHeader(http.StatusBadGateway)
+			},
 		}
+		// расшарить контекст https://stackoverflow.com/questions/55210593/share-context-between-handlefunc-and-modifyresponse-in-go-reverse-proxy
 		proxy.ServeHTTP(w, r)
 	})
 }

@@ -9,32 +9,42 @@ import (
 	"net/url"
 	"strings"
 
+	"test/auth"
 	"test/geo"
 	"test/static"
 
 	// "test/worker"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/jwtauth"
 )
 
 func main() {
 	r := chi.NewRouter()
 
-	rp := NewReverseProxy("hugo", "1313")
+	// Создание экземпляра аутентификации JWT
+	auth.TokenAuth = jwtauth.New("HS256", []byte("mysecretkey"), nil)
 
+	rp := NewReverseProxy("hugo", "1313")
 	r.Use(rp.ReverseProxy)
 
 	r.Get("/api", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello from API"))
 	})
+	
+	r.Post("/api/register", auth.Register)
+	r.Post("/api/login", auth.Login)
 
 	geoService := geo.New()
-	r.Post("/api/address/search", geoService.SearchHandler)
-	r.Post("/api/address/geocode", geoService.GeocodeHandler)
+	// Защищенные маршруты геосервиса, требующие авторизации
+	r.Group(func(r chi.Router) {
+		r.Use(jwtauth.Verifier(auth.TokenAuth))
+		// r.Use(jwtauth.Authenticator)
+		r.Use(MyCustomAuthenticator)
 
-	// r.Get("/public/*", func(w http.ResponseWriter, r *http.Request) {
-	// 	http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))).ServeHTTP(w, r)
-	// })
+		r.Post("/api/address/search", geoService.SearchHandler)
+		r.Post("/api/address/geocode", geoService.GeocodeHandler)
+	})
 
 	// go worker.Tasks()
 

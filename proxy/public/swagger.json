@@ -89,6 +89,64 @@
           }
         }
       }
+    },
+    "/api/login": {
+      "post": {
+        "description": "Авторизация пользователя",
+        "tags": [
+          "authorization"
+        ],
+        "operationId": "RequestLogin",
+        "parameters": [
+          {
+            "example": "{\"name\":\"tim\",\"password\":\"123\"}",
+            "description": "Авторизация",
+            "name": "Authorization",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ResponseLogin",
+            "schema": {
+              "$ref": "#/definitions/ResponseLogin"
+            }
+          }
+        }
+      }
+    },
+    "/api/register": {
+      "post": {
+        "description": "Регистрация нового пользователя",
+        "tags": [
+          "registration"
+        ],
+        "operationId": "RequestRegister",
+        "parameters": [
+          {
+            "example": "{\"name\":\"tim\",\"password\":\"123\"}",
+            "description": "Регистрация",
+            "name": "Registration",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ResponseRegister",
+            "schema": {
+              "$ref": "#/definitions/ResponseRegister"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -124,6 +182,26 @@
       "properties": {
         "Addresses": {
           "$ref": "#/definitions/Address"
+        }
+      },
+      "x-go-package": "test/static"
+    },
+    "ResponseLogin": {
+      "type": "object",
+      "properties": {
+        "Token": {
+          "description": "in:body\nToken содержит информацию о токене",
+          "type": "string"
+        }
+      },
+      "x-go-package": "test/static"
+    },
+    "ResponseRegister": {
+      "type": "object",
+      "properties": {
+        "Token": {
+          "description": "in:body\nToken содержит информацию о регистрации",
+          "type": "string"
         }
       },
       "x-go-package": "test/static"

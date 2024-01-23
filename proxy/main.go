@@ -40,7 +40,7 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(jwtauth.Verifier(auth.TokenAuth))
 		// r.Use(jwtauth.Authenticator)
-		r.Use(MyCustomAuthenticator)
+		r.Use(auth.Authenticator)
 
 		r.Post("/api/address/search", geoService.SearchHandler)
 		r.Post("/api/address/geocode", geoService.GeocodeHandler)

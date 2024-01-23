@@ -14,7 +14,7 @@
 //	- application/json
 //
 //	Security:
-//	- basic
+//	- Bearer
 //
 //
 //	SecurityDefinitions:
@@ -30,7 +30,7 @@ import "test/geo"
 
 //go:generate `swagger generate spec -o /go/src/proxy/public/swagger.json --scan-models`
 
-// swagger:route POST /api/register registration RequestRegister
+// swagger:route POST /api/register auth RequestRegister
 //		Регистрация нового пользователя
 // Security:
 // - basic
@@ -53,7 +53,7 @@ type ResponseRegister struct {
 	Token string
 }
 
-// swagger:route POST /api/login authorization RequestLogin
+// swagger:route POST /api/login auth RequestLogin
 //		Авторизация пользователя
 // Security:
 // - basic

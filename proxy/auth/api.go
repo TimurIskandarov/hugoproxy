@@ -68,12 +68,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// проверка пароля
-	isMatchPassword := func(password string) bool {
-		return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) == nil
+	isMatchPassword := func(hashedPassword string) bool {
+		return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(user.Password)) == nil
 	}
-	// если пользователь не зарегистрирован
-	if password, ok := users[user.Name]; !ok && !isMatchPassword(password) {
-		http.Error(w, "user not found", http.StatusOK)
+
+	// если пользователь не зарегистрирован или пароль не совпадает
+	if hashedPassword, ok := users[user.Name]; !(ok && isMatchPassword(hashedPassword)) {
+		http.Error(w, "entered data is incorrect", http.StatusOK)
 		return
 	}
 
